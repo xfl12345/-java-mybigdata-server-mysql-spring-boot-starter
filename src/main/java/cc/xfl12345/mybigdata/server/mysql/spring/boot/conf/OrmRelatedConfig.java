@@ -5,16 +5,15 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.teasoft.honey.osql.core.SessionFactory;
 import org.teasoft.spring.boot.config.BeeAutoConfiguration;
 
 @Configuration
 @AutoConfigureAfter({BeeAutoConfiguration.class})
 public class OrmRelatedConfig {
-    // @DependsOn("sessionFactory")
     @Bean
     @ConditionalOnMissingBean
-    public CoreTableCache coreTableCache() {
+    public CoreTableCache coreTableCache(SessionFactory sessionFactory) {
         return new CoreTableCache();
     }
 }

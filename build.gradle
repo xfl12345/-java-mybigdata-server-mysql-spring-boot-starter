@@ -121,13 +121,13 @@ dependencies {
         // api group: 'cc.xfl12345.mybigdata', name: 'server-mysql', version: depsParentVersion, classifier: 'sources'
         // api group: 'cc.xfl12345.mybigdata', name: 'server-mysql', version: depsParentVersion, ext: 'pom'
     } else {
-        def depsParentVersion = 'e4af43463a'
+        def depsParentVersion = '513d8adec4'
         api platform(group: 'com.github.xfl12345', name: 'java-mybigdata-server-deps-parent', version: depsParentVersion)
         annotationProcessor platform(group: 'com.github.xfl12345', name: 'java-mybigdata-server-deps-parent', version: depsParentVersion)
         testAnnotationProcessor platform(group: 'com.github.xfl12345', name: 'java-mybigdata-server-deps-parent', version: depsParentVersion)
         testImplementation platform(group: 'com.github.xfl12345', name: 'java-mybigdata-server-deps-parent', version: depsParentVersion)
 
-        def parentModuleVersion = '9b49db6cb6'
+        def parentModuleVersion = '31e6c4dec8'
         // https://jitpack.io/#xfl12345/java-mybigdata-server-mysql
         api group: 'com.github.xfl12345', name: 'java-mybigdata-server-mysql', version: parentModuleVersion
         // api group: 'com.github.xfl12345', name: 'java-mybigdata-server-mysql', version: parentModuleVersion, ext: 'pom'
@@ -145,7 +145,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.teasoft/bee-spring-boot-starter
     api group: 'org.teasoft', name: 'bee-spring-boot-starter'
 
-    api group: 'org.slf4j', name: 'slf4j-api'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'

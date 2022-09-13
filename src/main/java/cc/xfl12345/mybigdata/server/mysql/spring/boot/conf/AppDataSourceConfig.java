@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
-@AutoConfigureAfter({MapperConfig.class})
+@AutoConfigureAfter({AccountMapper4WebConfig.class})
 public class AppDataSourceConfig {
     @Bean
     @ConditionalOnMissingBean
