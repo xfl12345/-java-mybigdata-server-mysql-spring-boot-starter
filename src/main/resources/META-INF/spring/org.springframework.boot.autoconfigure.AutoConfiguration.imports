@@ -1,6 +1,5 @@
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.NormalConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.DatabaseDataSourceConfig
-cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.BeeFixConfiguration
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.OrmRelatedConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.MapperConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.AccountMapper4WebConfig
