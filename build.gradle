@@ -147,7 +147,7 @@ dependencies {
     api group: 'com.alibaba', name: 'druid-spring-boot-starter'
 
     // https://mvnrepository.com/artifact/org.teasoft/bee-spring-boot-starter
-    api group: 'org.teasoft', name: 'bee-spring-boot-starter', version: '1.17.boot2.5.13'
+    api group: 'org.teasoft', name: 'bee-spring-boot-starter'
 
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
