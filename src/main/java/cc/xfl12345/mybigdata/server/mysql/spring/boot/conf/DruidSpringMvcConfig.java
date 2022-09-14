@@ -4,6 +4,7 @@ import cc.xfl12345.mybigdata.server.mysql.web.controller.DruidStatController;
 import cc.xfl12345.mybigdata.server.mysql.web.interceptor.DruidStatInterceptor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Objects;
 
 @Configuration
+@ComponentScan(basePackageClasses = DruidStatController.class)
 public class DruidSpringMvcConfig implements WebMvcConfigurer {
     @Getter
     protected DruidStatInterceptor druidStatInterceptor;
