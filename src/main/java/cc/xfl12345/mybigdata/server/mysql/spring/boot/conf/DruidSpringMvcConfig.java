@@ -1,7 +1,7 @@
 package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 
-import cc.xfl12345.mybigdata.server.mysql.web.controller.DruidStatController;
-import cc.xfl12345.mybigdata.server.mysql.web.interceptor.DruidStatInterceptor;
+import cc.xfl12345.mybigdata.server.mysql.spring.web.controller.DruidStatController;
+import cc.xfl12345.mybigdata.server.mysql.spring.web.interceptor.DruidStatInterceptor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;

@@ -11,9 +11,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
-@AutoConfigureAfter({AccountMapper4WebConfig.class})
+@AutoConfigureAfter({MapperConfig.class})
 public class AppDataSourceConfig {
     @Bean
     @ConditionalOnMissingBean
