@@ -6,4 +6,4 @@ cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.OrmRelatedConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.MapperConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.AppDataSourceConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.AppDataHandlerConfig
-cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.AccountMapper4WebConfig
+cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.Mapper4WebConfig
