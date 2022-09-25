@@ -131,7 +131,7 @@ dependencies {
         depsParentVersion = 'ad2e00850d'
         applyPlatform2All(group: 'com.github.xfl12345', name: 'java-mybigdata-server-deps-parent', version: depsParentVersion)
 
-        def parentModuleVersion = 'fafc1d5fb0'
+        def parentModuleVersion = '1ca7f5aa9d'
         // https://jitpack.io/#xfl12345/java-mybigdata-server-mysql
         api group: 'com.github.xfl12345', name: 'java-mybigdata-server-mysql', version: parentModuleVersion
         // api group: 'com.github.xfl12345', name: 'java-mybigdata-server-mysql', version: parentModuleVersion, ext: 'pom'
