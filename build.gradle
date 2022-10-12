@@ -29,10 +29,6 @@ plugins {
     id 'java'
 }
 
-group = 'cc.xfl12345.mybigdata'
-version = '0.0.1'
-sourceCompatibility = '17'
-
 eclipse {
     classpath {
         downloadSources = true
@@ -48,7 +44,7 @@ idea {
 }
 
 java {
-    compileJava.options.compilerArgs  << '-Xlint:unchecked'
+    compileJava.options.compilerArgs  << '-Xlint:unchecked' << '-Xlint:deprecation'
     compileJava.options.encoding = 'UTF-8'
     withSourcesJar()
     // withJavadocJar()
@@ -65,6 +61,10 @@ publishing {
         }
     }
 }
+
+group = 'cc.xfl12345.mybigdata'
+version = '0.4.0'
+sourceCompatibility = '17'
 
 
 repositories {
@@ -93,7 +93,7 @@ import java.nio.charset.StandardCharsets
 dependencies {
     // 补全环境，使得 Intelij IDEA 可以调试 build.gradle
     // https://search.maven.org/artifact/org.apache.groovy/groovy-all/4.0.4/pom
-    testRuntimeOnly 'org.apache.groovy:groovy:4.0.4'
+    testRuntimeOnly 'org.apache.groovy:groovy:4.0.5'
 
     File localDevModeConfFile = new File("localDevMode");
     boolean isLocalDevMode = false;
@@ -122,16 +122,15 @@ dependencies {
         testRuntimeClasspath platform(myDependencyParent)
     }
 
-    String depsParentVersion = '0.0.1'
+    String depsParentVersion = '0.0.3'
+    String parentModuleVersion = getProject().getVersion()
     if (isLocalDevMode) {
         applyPlatform2All(group: 'cc.xfl12345.mybigdata', name: 'server-deps-parent', version: depsParentVersion)
 
-        api group: 'cc.xfl12345.mybigdata', name: 'server-mysql'
+        api group: 'cc.xfl12345.mybigdata', name: 'server-mysql', version: parentModuleVersion
     } else {
-        depsParentVersion = 'ad2e00850d'
         applyPlatform2All(group: 'com.github.xfl12345', name: 'java-mybigdata-server-deps-parent', version: depsParentVersion)
 
-        def parentModuleVersion = '1ca7f5aa9d'
         // https://jitpack.io/#xfl12345/java-mybigdata-server-mysql
         api group: 'com.github.xfl12345', name: 'java-mybigdata-server-mysql', version: parentModuleVersion
         // api group: 'com.github.xfl12345', name: 'java-mybigdata-server-mysql', version: parentModuleVersion, ext: 'pom'

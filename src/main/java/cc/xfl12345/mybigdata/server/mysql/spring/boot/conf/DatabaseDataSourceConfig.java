@@ -22,7 +22,7 @@ public class DatabaseDataSourceConfig {
         return new MyDatabaseInitializer();
     }
 
-    @DependsOn("myDatabaseInitializer")
+    @DependsOn({"myDatabaseInitializer"})
     @Bean(initMethod = "init")
     public DruidDataSource dataSource() {
         return new DruidDataSourceWrapper();
