@@ -10,9 +10,8 @@ import cc.xfl12345.mybigdata.server.mysql.api.DatabaseViewerImpl;
 import cc.xfl12345.mybigdata.server.mysql.api.IdViewerImpl;
 import cc.xfl12345.mybigdata.server.mysql.database.converter.AppIdTypeConverter;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.CoreTableCache;
-import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoManager;
+import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoPack;
 import cc.xfl12345.mybigdata.server.mysql.database.pojo.AuthAccount;
-import cc.xfl12345.mybigdata.server.mysql.database.pojo.GlobalDataRecord;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +20,9 @@ import org.springframework.context.annotation.Configuration;
 public class Api4WebConfig {
     @Bean
     @ConditionalOnMissingBean
-    public AccountMapper accountMapper(DaoManager daoManager, AppIdTypeConverter idTypeConverter) {
+    public AccountMapper accountMapper(DaoPack daoPack, AppIdTypeConverter idTypeConverter) {
         AccountMapperImpl accountMapper = new AccountMapperImpl();
-        accountMapper.setAuthAccountMapper(daoManager.getMapper(AuthAccount.class));
+        accountMapper.setAuthAccountMapper(daoPack.getMapper(AuthAccount.class));
         accountMapper.setIdTypeConverter(idTypeConverter);
 
         return accountMapper;
@@ -37,8 +36,11 @@ public class Api4WebConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public DatabaseViewer databaseViewer(CoreTableCache coreTableCache) throws Exception {
-        return new DatabaseViewerImpl();
+    public DatabaseViewer databaseViewer(DaoPack daoPack) throws Exception {
+        DatabaseViewerImpl databaseViewer = new DatabaseViewerImpl();
+        databaseViewer.setDaoManager(daoPack);
+
+        return databaseViewer;
     }
 
     @Bean
@@ -46,11 +48,9 @@ public class Api4WebConfig {
     public IdViewer idViewer(
         CoreTableCache coreTableCache,
         AppIdTypeConverter idTypeConverter,
-        DaoManager daoManager) {
+        DaoPack daoPack) {
         IdViewerImpl idViewer = new IdViewerImpl();
-        idViewer.setCoreTableCache(coreTableCache);
-        idViewer.setIdTypeConverter(idTypeConverter);
-        idViewer.setGlobalDataRecordMapper(daoManager.getMapper(GlobalDataRecord.class));
+        idViewer.setDaoPack(daoPack);
 
         return idViewer;
     }

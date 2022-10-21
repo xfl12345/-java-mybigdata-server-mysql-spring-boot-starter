@@ -4,13 +4,13 @@ import cc.xfl12345.mybigdata.server.mysql.spring.web.controller.DruidStatControl
 import cc.xfl12345.mybigdata.server.mysql.spring.web.interceptor.DruidStatInterceptor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@ComponentScan(basePackageClasses = DruidStatController.class)
 public class DruidSpringMvcConfig implements WebMvcConfigurer {
     @Getter
     protected DruidStatInterceptor druidStatInterceptor;
@@ -19,6 +19,13 @@ public class DruidSpringMvcConfig implements WebMvcConfigurer {
     public void setDruidStatInterceptor(DruidStatInterceptor druidStatInterceptor) {
         this.druidStatInterceptor = druidStatInterceptor;
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public DruidStatController druidStatController() {
+        return new DruidStatController();
+    }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

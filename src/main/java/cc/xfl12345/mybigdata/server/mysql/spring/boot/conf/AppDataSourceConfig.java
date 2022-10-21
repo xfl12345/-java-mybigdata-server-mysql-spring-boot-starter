@@ -7,7 +7,7 @@ import cc.xfl12345.mybigdata.server.mysql.data.source.IdDataSourceImpl;
 import cc.xfl12345.mybigdata.server.mysql.data.source.NumberTypeSourceImpl;
 import cc.xfl12345.mybigdata.server.mysql.data.source.StringTypeSourceImpl;
 import cc.xfl12345.mybigdata.server.mysql.database.converter.AppIdTypeConverter;
-import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoManager;
+import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoPack;
 import cc.xfl12345.mybigdata.server.mysql.database.pojo.GlobalDataRecord;
 import cc.xfl12345.mybigdata.server.mysql.database.pojo.NumberContent;
 import cc.xfl12345.mybigdata.server.mysql.database.pojo.StringContent;
@@ -19,27 +19,27 @@ import org.springframework.context.annotation.Configuration;
 public class AppDataSourceConfig {
     @Bean
     @ConditionalOnMissingBean
-    public StringTypeSource stringTypeSource(DaoManager daoManager) {
+    public StringTypeSource stringTypeSource(DaoPack daoPack) {
         StringTypeSourceImpl source = new StringTypeSourceImpl();
-        source.setMapper(daoManager.getMapper(StringContent.class));
+        source.setMapper(daoPack.getMapper(StringContent.class));
 
         return source;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public NumberTypeSource numberTypeSource(DaoManager daoManager) {
+    public NumberTypeSource numberTypeSource(DaoPack daoPack) {
         NumberTypeSourceImpl source = new NumberTypeSourceImpl();
-        source.setMapper(daoManager.getMapper(NumberContent.class));
+        source.setMapper(daoPack.getMapper(NumberContent.class));
 
         return source;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public IdDataSource idDataSource(DaoManager daoManager, AppIdTypeConverter idTypeConverter) {
+    public IdDataSource idDataSource(DaoPack daoPack, AppIdTypeConverter idTypeConverter) {
         IdDataSourceImpl source = new IdDataSourceImpl();
-        source.setMapper(daoManager.getMapper(GlobalDataRecord.class));
+        source.setMapper(daoPack.getMapper(GlobalDataRecord.class));
         source.setIdTypeConverter(idTypeConverter);
 
         return source;
