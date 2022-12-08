@@ -1,8 +1,9 @@
 package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 
+import cc.xfl12345.mybigdata.server.common.database.error.SqlErrorAnalyst;
 import cc.xfl12345.mybigdata.server.mysql.database.converter.AppIdTypeConverter;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.CoreTableCache;
-import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.TableMapperProperties;
+import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.MapperProperties;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoPack;
 import com.fasterxml.uuid.NoArgGenerator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,20 +14,25 @@ import org.springframework.context.annotation.Configuration;
 public class MapperConfig {
     @Bean
     @ConditionalOnMissingBean
-    public TableMapperProperties tableMapperProperties(AppIdTypeConverter idTypeConverter, CoreTableCache coreTableCache, NoArgGenerator uuidGenerator) {
-        TableMapperProperties tableMapperProperties = new TableMapperProperties();
+    public MapperProperties tableMapperProperties(
+        AppIdTypeConverter idTypeConverter,
+        CoreTableCache coreTableCache,
+        NoArgGenerator uuidGenerator,
+        SqlErrorAnalyst sqlErrorAnalyst) {
+        MapperProperties tableMapperProperties = new MapperProperties();
         tableMapperProperties.setIdTypeConverter(idTypeConverter);
         tableMapperProperties.setCoreTableCache(coreTableCache);
         tableMapperProperties.setUuidGenerator(uuidGenerator);
+        tableMapperProperties.setSqlErrorAnalyst(sqlErrorAnalyst);
 
         return tableMapperProperties;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public DaoPack daoPack(TableMapperProperties tableMapperProperties) {
+    public DaoPack daoPack(MapperProperties tableMapperProperties) {
         DaoPack daoPack = new DaoPack();
-        daoPack.setTableMapperProperties(tableMapperProperties);
+        daoPack.setMapperProperties(tableMapperProperties);
 
         return daoPack;
     }
