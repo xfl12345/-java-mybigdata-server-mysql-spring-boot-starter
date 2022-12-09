@@ -8,7 +8,6 @@ import cc.xfl12345.mybigdata.server.mysql.api.AccountMapperImpl;
 import cc.xfl12345.mybigdata.server.mysql.api.AdvanceSearchMapperImpl;
 import cc.xfl12345.mybigdata.server.mysql.api.DatabaseViewerImpl;
 import cc.xfl12345.mybigdata.server.mysql.api.IdViewerImpl;
-import cc.xfl12345.mybigdata.server.mysql.database.converter.AppIdTypeConverter;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.CoreTableCache;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoPack;
 import cc.xfl12345.mybigdata.server.mysql.database.pojo.AuthAccount;
@@ -21,10 +20,9 @@ import org.springframework.context.annotation.Configuration;
 public class Api4WebConfig {
     @Bean
     @ConditionalOnMissingBean
-    public AccountMapper accountMapper(DaoPack daoPack, AppIdTypeConverter idTypeConverter) {
+    public AccountMapper accountMapper(DaoPack daoPack) {
         AccountMapperImpl accountMapper = new AccountMapperImpl();
         accountMapper.setAuthAccountMapper(daoPack.getTableBasicMapper(AuthAccount.class));
-        accountMapper.setIdTypeConverter(idTypeConverter);
 
         return accountMapper;
     }

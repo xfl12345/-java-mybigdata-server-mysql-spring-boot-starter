@@ -1,7 +1,6 @@
 package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 
 import cc.xfl12345.mybigdata.server.common.database.error.SqlErrorAnalyst;
-import cc.xfl12345.mybigdata.server.mysql.database.converter.AppIdTypeConverter;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.CoreTableCache;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.MapperProperties;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoPack;
@@ -15,12 +14,10 @@ public class MapperConfig {
     @Bean
     @ConditionalOnMissingBean
     public MapperProperties tableMapperProperties(
-        AppIdTypeConverter idTypeConverter,
         CoreTableCache coreTableCache,
         NoArgGenerator uuidGenerator,
         SqlErrorAnalyst sqlErrorAnalyst) {
         MapperProperties tableMapperProperties = new MapperProperties();
-        tableMapperProperties.setIdTypeConverter(idTypeConverter);
         tableMapperProperties.setCoreTableCache(coreTableCache);
         tableMapperProperties.setUuidGenerator(uuidGenerator);
         tableMapperProperties.setSqlErrorAnalyst(sqlErrorAnalyst);

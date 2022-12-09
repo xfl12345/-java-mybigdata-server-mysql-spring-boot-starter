@@ -1,9 +1,7 @@
 package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 
 import cc.xfl12345.mybigdata.server.common.database.error.SqlErrorAnalyst;
-import cc.xfl12345.mybigdata.server.mysql.database.converter.AppIdTypeConverter;
 import cc.xfl12345.mybigdata.server.mysql.database.error.SqlErrorAnalystImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.NoArgGenerator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,17 +20,5 @@ public class NormalConfig {
     @ConditionalOnMissingBean
     public NoArgGenerator uuidGenerator() {
         return Generators.timeBasedGenerator();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public AppIdTypeConverter idTypeConverter() {
-        return new AppIdTypeConverter();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ObjectMapper jsonObjectMapper() {
-        return new ObjectMapper();
     }
 }

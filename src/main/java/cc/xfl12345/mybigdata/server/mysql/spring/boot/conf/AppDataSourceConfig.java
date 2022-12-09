@@ -23,7 +23,6 @@ public class AppDataSourceConfig {
         MapperProperties mapperProperties = daoPack.getMapperProperties();
 
         GlobalDataRecordDataSourceImpl source = new GlobalDataRecordDataSourceImpl();
-        source.setIdTypeConverter(mapperProperties.getIdTypeConverter());
         source.setCoreTableCache(mapperProperties.getCoreTableCache());
         source.setUuidGenerator(mapperProperties.getUuidGenerator());
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
@@ -41,7 +40,6 @@ public class AppDataSourceConfig {
         source.setMapper(daoPack.getBeeTableMapper(StringContent.class));
 
         MapperProperties mapperProperties = daoPack.getMapperProperties();
-        source.setIdTypeConverter(mapperProperties.getIdTypeConverter());
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
 
         return source;
@@ -55,7 +53,6 @@ public class AppDataSourceConfig {
         source.setMapper(daoPack.getBeeTableMapper(NumberContent.class));
 
         MapperProperties mapperProperties = daoPack.getMapperProperties();
-        source.setIdTypeConverter(mapperProperties.getIdTypeConverter());
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
 
         return source;
@@ -74,7 +71,6 @@ public class AppDataSourceConfig {
         source.setSecondMapper(daoPack.getBeeTableMapper(GroupContent.class));
 
         MapperProperties mapperProperties = daoPack.getMapperProperties();
-        source.setIdTypeConverter(mapperProperties.getIdTypeConverter());
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
 
         return source;
