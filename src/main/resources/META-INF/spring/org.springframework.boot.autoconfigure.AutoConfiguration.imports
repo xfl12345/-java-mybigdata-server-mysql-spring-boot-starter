@@ -1,4 +1,5 @@
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.NormalConfig
+cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.JsonConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.SpringMvcInterceptorConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.DruidSpringMvcConfig
 cc.xfl12345.mybigdata.server.mysql.spring.boot.conf.DatabaseDataSourceConfig

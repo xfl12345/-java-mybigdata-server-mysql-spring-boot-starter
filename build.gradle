@@ -93,7 +93,7 @@ import java.nio.charset.StandardCharsets
 dependencies {
     // 补全环境，使得 Intelij IDEA 可以调试 build.gradle
     // https://search.maven.org/artifact/org.apache.groovy/groovy-all/4.0.4/pom
-    testRuntimeOnly 'org.apache.groovy:groovy:4.0.6'
+    testRuntimeOnly 'org.apache.groovy:groovy:4.0.7'
 
     File localDevModeConfFile = new File("localDevMode");
     boolean isLocalDevMode = false;
@@ -122,7 +122,7 @@ dependencies {
         // testRuntimeClasspath platform(myDependencyParent)
     }
 
-    String depsParentVersion = '0.0.8'
+    String depsParentVersion = '0.0.10'
     String parentModuleVersion = getProject().getVersion()
     if (isLocalDevMode) {
         applyPlatform2All(group: 'cc.xfl12345.mybigdata', name: 'server-deps-parent', version: depsParentVersion)

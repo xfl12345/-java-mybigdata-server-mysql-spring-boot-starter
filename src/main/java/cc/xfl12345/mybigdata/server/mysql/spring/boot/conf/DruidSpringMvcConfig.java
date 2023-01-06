@@ -26,7 +26,6 @@ public class DruidSpringMvcConfig implements WebMvcConfigurer {
         return new DruidStatController();
     }
 
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Druid 的路由拦截器

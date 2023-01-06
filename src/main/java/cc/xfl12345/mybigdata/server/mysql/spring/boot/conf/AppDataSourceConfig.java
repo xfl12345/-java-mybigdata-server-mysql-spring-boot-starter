@@ -1,16 +1,14 @@
 package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 
-import cc.xfl12345.mybigdata.server.common.data.source.GlobalDataRecordDataSource;
-import cc.xfl12345.mybigdata.server.common.data.source.GroupTypeSource;
-import cc.xfl12345.mybigdata.server.common.data.source.NumberTypeSource;
-import cc.xfl12345.mybigdata.server.common.data.source.StringTypeSource;
-import cc.xfl12345.mybigdata.server.mysql.api.GlobalDataRecordDataSourceImpl;
-import cc.xfl12345.mybigdata.server.mysql.data.source.impl.GroupTypeSourceImpl;
-import cc.xfl12345.mybigdata.server.mysql.data.source.impl.NumberTypeSourceImpl;
-import cc.xfl12345.mybigdata.server.mysql.data.source.impl.StringTypeSourceImpl;
+import cc.xfl12345.mybigdata.server.common.data.source.*;
+import cc.xfl12345.mybigdata.server.mysql.data.source.DataSourceHomeImpl;
+import cc.xfl12345.mybigdata.server.mysql.data.source.impl.*;
+import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.CoreTableCache;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.MapperProperties;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoPack;
+import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.bee.GlobalDataRecordBeeTableMapper;
 import cc.xfl12345.mybigdata.server.mysql.database.pojo.*;
+import com.networknt.schema.JsonSchemaFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,42 +16,39 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppDataSourceConfig {
     @Bean
-    @ConditionalOnMissingBean(value = {GlobalDataRecordDataSource.class})
-    public GlobalDataRecordDataSourceImpl globalDataRecordDataSource(DaoPack daoPack) {
-        MapperProperties mapperProperties = daoPack.getMapperProperties();
-
-        GlobalDataRecordDataSourceImpl source = new GlobalDataRecordDataSourceImpl();
-        source.setCoreTableCache(mapperProperties.getCoreTableCache());
-        source.setUuidGenerator(mapperProperties.getUuidGenerator());
-        source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
-
-        source.setTableMapper(daoPack.getBeeTableMapper(GlobalDataRecord.class));
+    @ConditionalOnMissingBean
+    public IdDataSource idDataSource(DaoPack daoPack, GlobalDataRecordBeeTableMapper globalDataRecordMapper) {
+        IdDataSourceImpl source = new IdDataSourceImpl();
+        source.setGlobalDataRecordMapper(globalDataRecordMapper);
+        source.setCoreTableCache(daoPack.getMapperProperties().getCoreTableCache());
 
         return source;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public StringTypeSource stringTypeSource(DaoPack daoPack, GlobalDataRecordDataSource globalDataRecordDataSource) {
+    public StringTypeSource stringTypeSource(DaoPack daoPack, IdDataSource idDataSource) {
         StringTypeSourceImpl source = new StringTypeSourceImpl();
-        source.setGlobalDataRecordDataSource(globalDataRecordDataSource);
+        source.setIdDataSource(idDataSource);
         source.setMapper(daoPack.getBeeTableMapper(StringContent.class));
 
         MapperProperties mapperProperties = daoPack.getMapperProperties();
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
+        source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
         return source;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public NumberTypeSource numberTypeSource(DaoPack daoPack, GlobalDataRecordDataSource globalDataRecordDataSource) {
+    public NumberTypeSource numberTypeSource(DaoPack daoPack, IdDataSource idDataSource) {
         NumberTypeSourceImpl source = new NumberTypeSourceImpl();
-        source.setGlobalDataRecordDataSource(globalDataRecordDataSource);
+        source.setIdDataSource(idDataSource);
         source.setMapper(daoPack.getBeeTableMapper(NumberContent.class));
 
         MapperProperties mapperProperties = daoPack.getMapperProperties();
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
+        source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
         return source;
     }
@@ -62,9 +57,9 @@ public class AppDataSourceConfig {
     @ConditionalOnMissingBean
     public GroupTypeSource groupTypeSource(DaoPack daoPack,
                                            StringTypeSource stringTypeSource,
-                                           GlobalDataRecordDataSource globalDataRecordDataSource) {
+                                           IdDataSource idDataSource) {
         GroupTypeSourceImpl source = new GroupTypeSourceImpl();
-        source.setGlobalDataRecordDataSource(globalDataRecordDataSource);
+        source.setIdDataSource(idDataSource);
         source.setStringTypeSource(stringTypeSource);
 
         source.setFirstMapper(daoPack.getBeeTableMapper(GroupRecord.class));
@@ -72,7 +67,78 @@ public class AppDataSourceConfig {
 
         MapperProperties mapperProperties = daoPack.getMapperProperties();
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
+        source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
         return source;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public JsonSchemaSource jsonSchemaSource(DaoPack daoPack,
+                                             StringTypeSource stringTypeSource,
+                                             IdDataSource idDataSource,
+                                             JsonSchemaFactory jsonSchemaFactory) {
+        JsonSchemaSourceImpl source = new JsonSchemaSourceImpl();
+        source.setIdDataSource(idDataSource);
+        source.setStringTypeSource(stringTypeSource);
+        source.setJsonSchemaFactory(jsonSchemaFactory);
+        source.setMapper(daoPack.getBeeTableMapper(TableSchemaRecord.class));
+
+        MapperProperties mapperProperties = daoPack.getMapperProperties();
+        source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
+        source.setCoreTableCache(mapperProperties.getCoreTableCache());
+
+        return source;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ObjectTypeSource objectTypeSource(DaoPack daoPack,
+                                             StringTypeSource stringTypeSource,
+                                             IdDataSource idDataSource) {
+        ObjectTypeSourceImpl source = new ObjectTypeSourceImpl();
+        source.setIdDataSource(idDataSource);
+        source.setStringTypeSource(stringTypeSource);
+
+        source.setFirstMapper(daoPack.getBeeTableMapper(ObjectRecord.class));
+        source.setSecondMapper(daoPack.getBeeTableMapper(ObjectContent.class));
+
+        MapperProperties mapperProperties = daoPack.getMapperProperties();
+        source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
+        source.setCoreTableCache(mapperProperties.getCoreTableCache());
+
+        return source;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSourceBag dataSourceBag(
+        IdDataSource idDataSource,
+        StringTypeSource stringTypeSource,
+        NumberTypeSource numberTypeSource,
+        GroupTypeSource groupTypeSource,
+        JsonSchemaSource jsonSchemaSource,
+        ObjectTypeSource objectTypeSource
+        ) {
+
+        DataSourceBag dataSourceBag = new DataSourceBag();
+        dataSourceBag.setIdDataSource(idDataSource);
+        dataSourceBag.setStringTypeSource(stringTypeSource);
+        dataSourceBag.setNumberTypeSource(numberTypeSource);
+        dataSourceBag.setGroupTypeSource(groupTypeSource);
+        dataSourceBag.setJsonSchemaSource(jsonSchemaSource);
+        dataSourceBag.setObjectTypeSource(objectTypeSource);
+
+        return dataSourceBag;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSourceHome dataSourceHome(DataSourceBag dataSourceBag, CoreTableCache coreTableCache) {
+        DataSourceHomeImpl dataSourceHome = new DataSourceHomeImpl();
+        dataSourceHome.setDataSourceBag(dataSourceBag);
+        dataSourceHome.setCoreTableCache(coreTableCache);
+
+        return dataSourceHome;
     }
 }

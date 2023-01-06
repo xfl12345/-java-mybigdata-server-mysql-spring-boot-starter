@@ -1,6 +1,6 @@
 package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 
-import cc.xfl12345.mybigdata.server.common.api.InstanceGenerator;
+import cc.xfl12345.mybigdata.server.common.pojo.InstanceGenerator;
 import cc.xfl12345.mybigdata.server.common.web.pojo.response.JsonApiResponseData;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.CoreTableCache;
 import cc.xfl12345.mybigdata.server.mysql.spring.web.BeeWebApiExecutor;
