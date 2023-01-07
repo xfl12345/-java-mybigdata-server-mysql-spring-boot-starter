@@ -1,6 +1,7 @@
 package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 
 import cc.xfl12345.mybigdata.server.common.data.source.*;
+import cc.xfl12345.mybigdata.server.common.data.source.impl.AbstractDataSource;
 import cc.xfl12345.mybigdata.server.mysql.data.source.DataSourceHomeImpl;
 import cc.xfl12345.mybigdata.server.mysql.data.source.impl.*;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.CoreTableCache;
@@ -13,21 +14,33 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.lang.reflect.Proxy;
+
 @Configuration
 public class AppDataSourceConfig {
-    @Bean
-    @ConditionalOnMissingBean
-    public IdDataSource idDataSource(DaoPack daoPack, GlobalDataRecordBeeTableMapper globalDataRecordMapper) {
-        IdDataSourceImpl source = new IdDataSourceImpl();
-        source.setGlobalDataRecordMapper(globalDataRecordMapper);
-        source.setCoreTableCache(daoPack.getMapperProperties().getCoreTableCache());
-
-        return source;
+    @SuppressWarnings("unchecked")
+    protected <T extends DataSource<?>> T getProxy(AbstractDataSource<?> dataSource, Class<T> theInterface) {
+        DataSourceInterceptorProxy handler = new DataSourceInterceptorProxy(dataSource);
+        return (T) Proxy.newProxyInstance(theInterface.getClassLoader(), new Class[]{ theInterface }, handler);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public StringTypeSource stringTypeSource(DaoPack daoPack, IdDataSource idDataSource) {
+    public IdDataSource idDataSource(DaoPack daoPack, GlobalDataRecordBeeTableMapper globalDataRecordMapper) throws Exception {
+        IdDataSourceImpl source = new IdDataSourceImpl();
+        source.setGlobalDataRecordMapper(globalDataRecordMapper);
+
+        MapperProperties mapperProperties = daoPack.getMapperProperties();
+        source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
+        source.setCoreTableCache(mapperProperties.getCoreTableCache());
+
+        source.init();
+        return getProxy(source, IdDataSource.class);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public StringTypeSource stringTypeSource(DaoPack daoPack, IdDataSource idDataSource) throws Exception {
         StringTypeSourceImpl source = new StringTypeSourceImpl();
         source.setIdDataSource(idDataSource);
         source.setMapper(daoPack.getBeeTableMapper(StringContent.class));
@@ -36,12 +49,13 @@ public class AppDataSourceConfig {
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
         source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
-        return source;
+        source.init();
+        return getProxy(source, StringTypeSource.class);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public NumberTypeSource numberTypeSource(DaoPack daoPack, IdDataSource idDataSource) {
+    public NumberTypeSource numberTypeSource(DaoPack daoPack, IdDataSource idDataSource) throws Exception {
         NumberTypeSourceImpl source = new NumberTypeSourceImpl();
         source.setIdDataSource(idDataSource);
         source.setMapper(daoPack.getBeeTableMapper(NumberContent.class));
@@ -50,14 +64,15 @@ public class AppDataSourceConfig {
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
         source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
-        return source;
+        source.init();
+        return getProxy(source, NumberTypeSource.class);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public GroupTypeSource groupTypeSource(DaoPack daoPack,
                                            StringTypeSource stringTypeSource,
-                                           IdDataSource idDataSource) {
+                                           IdDataSource idDataSource) throws Exception {
         GroupTypeSourceImpl source = new GroupTypeSourceImpl();
         source.setIdDataSource(idDataSource);
         source.setStringTypeSource(stringTypeSource);
@@ -69,7 +84,8 @@ public class AppDataSourceConfig {
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
         source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
-        return source;
+        source.init();
+        return getProxy(source, GroupTypeSource.class);
     }
 
     @Bean
@@ -77,7 +93,7 @@ public class AppDataSourceConfig {
     public JsonSchemaSource jsonSchemaSource(DaoPack daoPack,
                                              StringTypeSource stringTypeSource,
                                              IdDataSource idDataSource,
-                                             JsonSchemaFactory jsonSchemaFactory) {
+                                             JsonSchemaFactory jsonSchemaFactory) throws Exception {
         JsonSchemaSourceImpl source = new JsonSchemaSourceImpl();
         source.setIdDataSource(idDataSource);
         source.setStringTypeSource(stringTypeSource);
@@ -88,17 +104,20 @@ public class AppDataSourceConfig {
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
         source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
-        return source;
+        source.init();
+        return getProxy(source, JsonSchemaSource.class);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public ObjectTypeSource objectTypeSource(DaoPack daoPack,
                                              StringTypeSource stringTypeSource,
-                                             IdDataSource idDataSource) {
+                                             IdDataSource idDataSource,
+                                             JsonSchemaSource jsonSchemaSource) throws Exception {
         ObjectTypeSourceImpl source = new ObjectTypeSourceImpl();
         source.setIdDataSource(idDataSource);
         source.setStringTypeSource(stringTypeSource);
+        source.setJsonSchemaSource(jsonSchemaSource);
 
         source.setFirstMapper(daoPack.getBeeTableMapper(ObjectRecord.class));
         source.setSecondMapper(daoPack.getBeeTableMapper(ObjectContent.class));
@@ -107,7 +126,8 @@ public class AppDataSourceConfig {
         source.setSqlErrorAnalyst(mapperProperties.getSqlErrorAnalyst());
         source.setCoreTableCache(mapperProperties.getCoreTableCache());
 
-        return source;
+        source.init();
+        return getProxy(source, ObjectTypeSource.class);
     }
 
     @Bean
