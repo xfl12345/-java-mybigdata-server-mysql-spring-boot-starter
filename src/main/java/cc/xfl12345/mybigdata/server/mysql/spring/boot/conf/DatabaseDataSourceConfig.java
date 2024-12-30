@@ -3,30 +3,55 @@ package cc.xfl12345.mybigdata.server.mysql.spring.boot.conf;
 import cc.xfl12345.mybigdata.server.mysql.spring.helper.JdbcContextFinalizer;
 import cc.xfl12345.mybigdata.server.mysql.spring.helper.MyDatabaseInitializer;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Scope;
 import org.teasoft.spring.boot.config.BeeProperties;
 
 @Configuration
-@AutoConfigureBefore({DruidDataSourceAutoConfigure.class, BeeProperties.class})
+@AutoConfigureBefore({DataSourceAutoConfiguration.class, BeeProperties.class})
 public class DatabaseDataSourceConfig {
-    @Bean
-    @Scope("prototype")
-    public MyDatabaseInitializer myDatabaseInitializer() {
-        return new MyDatabaseInitializer();
+
+    protected void initDatabase(DataSourceProperties dataSourceProperties) throws Exception {
+        MyDatabaseInitializer initializer = new MyDatabaseInitializer();
+        initializer.setUrl(dataSourceProperties.getUrl());
+        initializer.setUsername(dataSourceProperties.getUsername());
+        initializer.setPassword(dataSourceProperties.getPassword());
+        initializer.init();
     }
 
-    @DependsOn({"myDatabaseInitializer"})
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean(initMethod = "init")
-    public DruidDataSource dataSource() {
+    @ConditionalOnClass(DruidDataSource.class)
+    public DruidDataSource dataSource(DataSourceProperties dataSourceProperties) throws Exception {
+        initDatabase(dataSourceProperties);
         return new DruidDataSourceWrapper();
     }
+
+    @Bean
+    @ConditionalOnMissingClass("com.alibaba.druid.pool.DruidDataSource")
+    public HikariDataSource dataSource2(DataSourceProperties dataSourceProperties) throws Exception {
+        initDatabase(dataSourceProperties);
+
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName(dataSourceProperties.getDriverClassName());
+        dataSource.setJdbcUrl(dataSourceProperties.getUrl());
+        dataSource.setUsername(dataSourceProperties.getUsername());
+        dataSource.setPassword(dataSourceProperties.getPassword());
+        dataSource.setPoolName(dataSourceProperties.getName());
+        dataSource.setDataSourceJNDI(dataSourceProperties.getJndiName());
+
+        return dataSource;
+    }
+
 
     @Bean
     @ConditionalOnMissingBean

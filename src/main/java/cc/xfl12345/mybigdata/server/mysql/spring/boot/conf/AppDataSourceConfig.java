@@ -9,6 +9,7 @@ import cc.xfl12345.mybigdata.server.mysql.database.mapper.base.MapperProperties;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.DaoPack;
 import cc.xfl12345.mybigdata.server.mysql.database.mapper.impl.bee.GlobalDataRecordBeeTableMapper;
 import cc.xfl12345.mybigdata.server.mysql.database.pojo.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.networknt.schema.JsonSchemaFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -154,10 +155,15 @@ public class AppDataSourceConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public DataSourceHome dataSourceHome(DataSourceBag dataSourceBag, CoreTableCache coreTableCache) {
+    public DataSourceHome dataSourceHome(DataSourceBag dataSourceBag,
+                                         CoreTableCache coreTableCache,
+                                         JsonSchemaFactory jsonSchemaFactory,
+                                         ObjectMapper jacksonObjectMapper) {
         DataSourceHomeImpl dataSourceHome = new DataSourceHomeImpl();
         dataSourceHome.setDataSourceBag(dataSourceBag);
         dataSourceHome.setCoreTableCache(coreTableCache);
+        dataSourceHome.setJsonSchemaFactory(jsonSchemaFactory);
+        dataSourceHome.setJacksonObjectMapper(jacksonObjectMapper);
 
         return dataSourceHome;
     }
